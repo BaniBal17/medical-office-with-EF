@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ConsultorioModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ConsultaSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HistoriaClinicaId" Type="int" Nullable="false" />
+    <Property Name="Fecha" Type="datetime" Nullable="false" />
+    <Property Name="Diagnostico" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Tratamiento" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TurnoId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="EspecialidadSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NombreEspecialidad" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HistoriaClinicaSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+    <Property Name="PacienteId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PermisoSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NombrePermiso" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RolAsociado" Type="bit" Nullable="false" />
+    <Property Name="Usuario_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'ConsultorioV2.dbo.Persona' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <EntityType Name="Persona">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PersonaSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Apellido" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DNI" Type="int" Nullable="false" />
+    <Property Name="FechaNacimiento" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PersonaSet_Medico">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="EspecialidadId" Type="int" Nullable="false" />
+    <Property Name="Matricula" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PersonaSet_Paciente">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="HistoriaClinicaId" Type="int" Nullable="false" />
+    <Property Name="ObraSocial" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="NumeroAfiliado" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PersonaSet_Personal">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Legajo" Type="int" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Telefono" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PersonaSet_Secretario">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="HorarioEntrada" Type="datetime" Nullable="false" />
+    <Property Name="HorarioSalida" Type="datetime" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TurnoSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Fecha" Type="datetime" Nullable="false" />
+    <Property Name="Hora" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Estado" Type="int" Nullable="false" />
+    <Property Name="PacienteId" Type="int" Nullable="false" />
+    <Property Name="MedicoId" Type="int" Nullable="false" />
+    <Property Name="Medico_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UsuarioSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NombreUsuario" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PasswordHash" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Rol" Type="bit" Nullable="false" />
+    <Property Name="Medico_Id" Type="int" />
+    <Property Name="Secretario_Id" Type="int" />
+  </EntityType>
+  <Association Name="FK_EspecialidadMedico">
+    <End Role="EspecialidadSet" Type="Self.EspecialidadSet" Multiplicity="1" />
+    <End Role="PersonaSet_Medico" Type="Self.PersonaSet_Medico" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EspecialidadSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PersonaSet_Medico">
+        <PropertyRef Name="EspecialidadId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoriaClinicaConsulta">
+    <End Role="HistoriaClinicaSet" Type="Self.HistoriaClinicaSet" Multiplicity="1" />
+    <End Role="ConsultaSet" Type="Self.ConsultaSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HistoriaClinicaSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ConsultaSet">
+        <PropertyRef Name="HistoriaClinicaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoriaClinicaPaciente1">
+    <End Role="PersonaSet_Paciente" Type="Self.PersonaSet_Paciente" Multiplicity="1" />
+    <End Role="HistoriaClinicaSet" Type="Self.HistoriaClinicaSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PersonaSet_Paciente">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HistoriaClinicaSet">
+        <PropertyRef Name="PacienteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Medico_inherits_Personal">
+    <End Role="PersonaSet_Personal" Type="Self.PersonaSet_Personal" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PersonaSet_Medico" Type="Self.PersonaSet_Medico" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="PersonaSet_Personal">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PersonaSet_Medico">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Paciente_inherits_Persona">
+    <End Role="PersonaSet" Type="Self.PersonaSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PersonaSet_Paciente" Type="Self.PersonaSet_Paciente" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="PersonaSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PersonaSet_Paciente">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Personal_inherits_Persona">
+    <End Role="PersonaSet" Type="Self.PersonaSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PersonaSet_Personal" Type="Self.PersonaSet_Personal" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="PersonaSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PersonaSet_Personal">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Secretario_inherits_Personal">
+    <End Role="PersonaSet_Personal" Type="Self.PersonaSet_Personal" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PersonaSet_Secretario" Type="Self.PersonaSet_Secretario" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="PersonaSet_Personal">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PersonaSet_Secretario">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TurnoConsulta">
+    <End Role="TurnoSet" Type="Self.TurnoSet" Multiplicity="1" />
+    <End Role="ConsultaSet" Type="Self.ConsultaSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TurnoSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ConsultaSet">
+        <PropertyRef Name="TurnoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TurnoMedico">
+    <End Role="PersonaSet_Medico" Type="Self.PersonaSet_Medico" Multiplicity="1" />
+    <End Role="TurnoSet" Type="Self.TurnoSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PersonaSet_Medico">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TurnoSet">
+        <PropertyRef Name="Medico_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsuarioMedico">
+    <End Role="PersonaSet_Medico" Type="Self.PersonaSet_Medico" Multiplicity="0..1" />
+    <End Role="UsuarioSet" Type="Self.UsuarioSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PersonaSet_Medico">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UsuarioSet">
+        <PropertyRef Name="Medico_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsuarioPermiso">
+    <End Role="UsuarioSet" Type="Self.UsuarioSet" Multiplicity="1" />
+    <End Role="PermisoSet" Type="Self.PermisoSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UsuarioSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PermisoSet">
+        <PropertyRef Name="Usuario_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsuarioSecretario">
+    <End Role="PersonaSet_Secretario" Type="Self.PersonaSet_Secretario" Multiplicity="0..1" />
+    <End Role="UsuarioSet" Type="Self.UsuarioSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PersonaSet_Secretario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UsuarioSet">
+        <PropertyRef Name="Secretario_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ConsultorioModelStoreContainer">
+    <EntitySet Name="ConsultaSet" EntityType="Self.ConsultaSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EspecialidadSet" EntityType="Self.EspecialidadSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HistoriaClinicaSet" EntityType="Self.HistoriaClinicaSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PermisoSet" EntityType="Self.PermisoSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PersonaSet" EntityType="Self.PersonaSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PersonaSet_Medico" EntityType="Self.PersonaSet_Medico" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PersonaSet_Paciente" EntityType="Self.PersonaSet_Paciente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PersonaSet_Personal" EntityType="Self.PersonaSet_Personal" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PersonaSet_Secretario" EntityType="Self.PersonaSet_Secretario" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TurnoSet" EntityType="Self.TurnoSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UsuarioSet" EntityType="Self.UsuarioSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Persona" EntityType="Self.Persona" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Persona].[Id] AS [Id]
+    FROM [dbo].[Persona] AS [Persona]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_EspecialidadMedico" Association="Self.FK_EspecialidadMedico">
+      <End Role="EspecialidadSet" EntitySet="EspecialidadSet" />
+      <End Role="PersonaSet_Medico" EntitySet="PersonaSet_Medico" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoriaClinicaConsulta" Association="Self.FK_HistoriaClinicaConsulta">
+      <End Role="HistoriaClinicaSet" EntitySet="HistoriaClinicaSet" />
+      <End Role="ConsultaSet" EntitySet="ConsultaSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoriaClinicaPaciente1" Association="Self.FK_HistoriaClinicaPaciente1">
+      <End Role="PersonaSet_Paciente" EntitySet="PersonaSet_Paciente" />
+      <End Role="HistoriaClinicaSet" EntitySet="HistoriaClinicaSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Medico_inherits_Personal" Association="Self.FK_Medico_inherits_Personal">
+      <End Role="PersonaSet_Personal" EntitySet="PersonaSet_Personal" />
+      <End Role="PersonaSet_Medico" EntitySet="PersonaSet_Medico" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Paciente_inherits_Persona" Association="Self.FK_Paciente_inherits_Persona">
+      <End Role="PersonaSet" EntitySet="PersonaSet" />
+      <End Role="PersonaSet_Paciente" EntitySet="PersonaSet_Paciente" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Personal_inherits_Persona" Association="Self.FK_Personal_inherits_Persona">
+      <End Role="PersonaSet" EntitySet="PersonaSet" />
+      <End Role="PersonaSet_Personal" EntitySet="PersonaSet_Personal" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Secretario_inherits_Personal" Association="Self.FK_Secretario_inherits_Personal">
+      <End Role="PersonaSet_Personal" EntitySet="PersonaSet_Personal" />
+      <End Role="PersonaSet_Secretario" EntitySet="PersonaSet_Secretario" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TurnoConsulta" Association="Self.FK_TurnoConsulta">
+      <End Role="TurnoSet" EntitySet="TurnoSet" />
+      <End Role="ConsultaSet" EntitySet="ConsultaSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TurnoMedico" Association="Self.FK_TurnoMedico">
+      <End Role="PersonaSet_Medico" EntitySet="PersonaSet_Medico" />
+      <End Role="TurnoSet" EntitySet="TurnoSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsuarioMedico" Association="Self.FK_UsuarioMedico">
+      <End Role="PersonaSet_Medico" EntitySet="PersonaSet_Medico" />
+      <End Role="UsuarioSet" EntitySet="UsuarioSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsuarioPermiso" Association="Self.FK_UsuarioPermiso">
+      <End Role="UsuarioSet" EntitySet="UsuarioSet" />
+      <End Role="PermisoSet" EntitySet="PermisoSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsuarioSecretario" Association="Self.FK_UsuarioSecretario">
+      <End Role="PersonaSet_Secretario" EntitySet="PersonaSet_Secretario" />
+      <End Role="UsuarioSet" EntitySet="UsuarioSet" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
